@@ -33,7 +33,8 @@ nav img {
 
 nav suggestion {
   margin-top: 20px;
-  display: block;
+  display: inline-block;
+  overflow-x: auto; 
 }
 
 nav suggestion span {
@@ -47,6 +48,7 @@ nav suggestion span {
   cursor: pointer;
   margin: 0 7px;
   font-weight: 700;
+  display: inline-table;
 }
 
 nav input {
@@ -68,7 +70,7 @@ container {
   display: list-item;
   list-style: none;
   text-align: center;
-  margin-top: 180px;
+  margin-top: 220px;
 }
 
 column {
@@ -160,5 +162,12 @@ modal img {
 
   modal img {
     width: 90%;
+  }
+  nav suggestion {
+    display: flex;
+  }
+
+  nav {
+    padding: 30px 0px;
   }
 }

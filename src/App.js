@@ -7,6 +7,7 @@ class App extends Component {
         super(props);
         this.state = {
             isLoading: true,
+            isSearched: false,
             suggestion: [],
             searchData: '',
             photos: [],
@@ -30,8 +31,11 @@ class App extends Component {
     componentDidMount() {
         //Get latest images on load
         this.getPhotos()
-
-        let suggestion = localStorage.getItem(suggestion);
+        if (localStorage.getItem("suggestion") !== null) {
+            this.setState({
+                suggestion: JSON.parse(localStorage.getItem("suggestion"))
+            })
+        }
     }
 
     handleChange(e) {
@@ -48,7 +52,8 @@ class App extends Component {
                 isLoading: true,
                 searchData: e.target.value,
                 photos: [],
-                next: 1
+                next: 1,
+                isSearched: true
             }, function () {
                 this.getPhotos()
             })
@@ -80,6 +85,18 @@ class App extends Component {
         })
     }
 
+    suggestionSearch(val) {
+        this.setState({
+            isLoading: true,
+            photos: [],
+            next: 1,
+            isSearched: true,
+            searchData: val
+        }, function () {
+            this.getPhotos()
+        })
+    }
+
     getPhotos() {
         //Main function to retriev images through api
 
@@ -94,7 +111,7 @@ class App extends Component {
             isEmpty: false
         })
 
-
+        //Check if next exist null
         if (this.state.next !== null) {
             fetch(`https://api.flickr.com/services/rest/?page=${this.state.next}&method=${METHOD}&api_key=${API_KEY}&text=${this.state.searchData}&format=json&nojsoncallback=1`, {
                 method: 'GET'
@@ -117,7 +134,7 @@ class App extends Component {
                             farm: photo.farm,
                             title: photo.title,
                             url: `https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}.jpg`
-                        }));
+                        })); // setting state of image data
 
                         this.setState({
                             next: next,
@@ -126,10 +143,33 @@ class App extends Component {
                                 ...photos
                             ]
                         })
+
+
+                        //Adding suggestion to localstorage
+                        if (this.state.isSearched === true && METHOD === "flickr.photos.search") {
+
+                            if (!this.state.suggestion.includes(this.state.searchData)) {
+                                if (this.state.suggestion.length >= 5) {
+                                    this.state.suggestion.shift()
+                                }
+                                this.state.suggestion.push(this.state.searchData)
+                            }
+
+                            this.setState({
+                                isSearched: false
+                            }, function () {
+                                localStorage.setItem("suggestion", JSON.stringify(this.state.suggestion))
+                            })
+
+                        }
+
+
                     }
 
+                    //if data is empty
                     else if (data.photos.total === '0') {
                         this.setState({
+                            isSearched: false,
                             isEmpty: true
                         })
                     }
@@ -139,6 +179,13 @@ class App extends Component {
                     })
                 })
         }
+        else {
+            this.setState({
+                isSearched: false
+            })
+        }
+
+
     }
 
     render() {
@@ -147,9 +194,11 @@ class App extends Component {
             isLoading,
             photos,
             modal,
-            isEmpty
+            isEmpty,
+            suggestion
         } = this.state;
 
+        // Lottie settings
         const defaultOptionsLottie = {
             loop: true,
             autoplay: true,
@@ -162,12 +211,16 @@ class App extends Component {
         return (
             <>
                 <nav>
-                    <img src="img/logo.png" /><br />
+                    <img src="img/logo.png" alt="logo" /><br />
                     <form autoComplete="on" onSubmit={this.onSubmit.bind(this)}>
                         <input type="search" value={searchData} onKeyDown={this.keyPress.bind(this)} onChange={this.handleChange.bind(this)} placeholder="Search" />
+                        <br />
                         <suggestion>
-                            <span>Hello</span>
-                            <span>Hello</span>
+                            {suggestion.map((item, index) => (
+                                <span key={index} onClick={() => this.suggestionSearch(item)}>
+                                    {item}
+                                </span>
+                            ))}
                         </suggestion>
                     </form>
                 </nav>
@@ -189,7 +242,7 @@ class App extends Component {
                 </container>
 
                 <modal className="animated fadeIn" onClick={() => this.imageHide()} style={{ display: `${modal.display}` }}>
-                    <img src={`${modal.image}`} />
+                    <img src={modal.image} alt={modal.title} />
                 </modal>
             </>
         )
