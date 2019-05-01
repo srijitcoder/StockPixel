@@ -1,9 +1,13 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900');
+
+* {
+  outline: none;
+}
+
 body {
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family: 'Poppins' !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -11,4 +15,150 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+nav {
+  background: white;
+  padding: 40px 0px;
+  width: 100%;
+  text-align: center;
+  position: fixed;
+  top:0;
+  left:0;
+}
+
+nav img {
+  width: 170px;
+}
+
+nav suggestion {
+  margin-top: 20px;
+  display: block;
+}
+
+nav suggestion span {
+  background: transparent;
+  padding: 5px 12px;
+  color: #000000;
+  border: 2px solid #000000;
+  border-radius: 5px;
+  font-size: 13px;
+  font-family: 'Poppins';
+  cursor: pointer;
+  margin: 0 7px;
+  font-weight: 700;
+}
+
+nav input {
+  border:0;
+  background: #e7e6e6;
+  border-radius: 7px;
+  padding: 10px;
+  text-align: center;
+  font-family: 'Poppins';
+  color:#000;
+  font-weight: 600;
+  margin-top:14px;
+  width:400px;
+}
+
+container {
+  width: 80%;
+  margin: 0 auto;    
+  display: list-item;
+  list-style: none;
+  text-align: center;
+  margin-top: 180px;
+}
+
+column {
+  width: 300px;
+  height: 300px;
+  display: inline-grid;
+  margin: 15px;
+}
+
+container wrap {
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.shimmer::before {
+  background: #f6f7f8;
+  background-image: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
+  background-repeat: no-repeat;
+  background-size: 800px 300px;
+  display: inline-block;
+  position: relative; 
+  width:300px;
+  height: 300px;
+  z-index: -1;
+  border-radius: 10px;
+  content: '';
+  -webkit-animation-duration: 1s;
+  -webkit-animation-fill-mode: forwards; 
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-name: placeholderShimmer;
+  -webkit-animation-timing-function: linear;
+
+  animation-duration: 1s;
+  animation-fill-mode: forwards; 
+  animation-iteration-count: infinite;
+  animation-name: placeholderShimmer;
+  animation-timing-function: linear;
+}
+
+modal {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top:0;
+  left:0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  transition: all 0.5s ease-in-out;
+}
+
+modal img {
+  width: 55%;
+}
+
+.empty {
+  padding: 40px 0px
+}
+
+@-webkit-keyframes placeholderShimmer {
+  0% {
+    background-position: -468px 0;
+  }
+
+  100% {
+    background-position: 468px 0; 
+  }
+}
+
+@keyframes placeholderShimmer {
+  0% {
+    background-position: -468px 0;
+  }
+
+  100% {
+    background-position: 468px 0; 
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  nav input {
+    width: 90%;
+  }
+
+  container {
+    width: 90%;
+  }
+
+  modal img {
+    width: 90%;
+  }
 }
